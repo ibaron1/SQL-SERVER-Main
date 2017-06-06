@@ -1,0 +1,44 @@
+To delete data from some tables - 
+
+1. Run fragmentation report with auto defrag for these tables - 
+	data/index fragmentation can take extra space if a table has LOB column
+
+2. Make sure there is enough space in database and tran log (at least 3-4 gb) 
+	to account for ghost records possible move
+
+3. Run delete with time limit
+
+4. During data delete monitor:
+	A. the number of ghost records  
+	B. free space during the delete
+
+DBCC CLEANTABLE
+
+5. EXEC sp_clean_db_free_space @dbname=N’FALCON_SRF_Rates’ [,@cleaning_delay= 'delay_in_seconds']
+	--to remove ghost records (residual data after update operations) - will affect I/O
+	-- run in maintenance window
+
+6. run below query as a workaround.
+
+DBCC TRACEON(661, 662,3604,-1)
+go
+DBCC FORCEGHOSTCLEANUP('FALCON_SRF_Rates')
+go
+DBCC TRACEOFF(661, 662,3604,-1)
+
+7. Once the commands are completed, run the rebuild Index to see if the space is reclaimed
+
+8. check the ghost record entries in the following dmv: 
+select  getdate(),* from sys.dm_db_index_physical_stats (db_id('FALCON_SRF_Rates'),object_id('srf_main.EODTradeStage'),null,null,'detailed') 
+
+9. In case you are seeing the Ghost Records even after following the above action plan then I suspect, there is some mismatch between PFS Page ghost_record Entries count for those records.
+To identify that corruption, please run the attached stored procedure(dbo.usp_getPFSGhostPages) 
+for database and table in question and provide the output -
+
+exec usp_getPFSGhostPages @dbname = 'FALCON_SRF_Rates', @tablename = 'srf_main.EODTradeStage'
+
+
+
+10. Microsoft states that SP3 fixes this issue but after deleting 100,000 rows from TradeStage in FALCON_SRF_RATES in Dev 
+    instance with SP3 applied the database ran out of space for this table's index
+
