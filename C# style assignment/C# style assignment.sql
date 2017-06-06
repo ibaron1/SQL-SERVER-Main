@@ -1,0 +1,1 @@
+declare @a int = 1; set @a += 1; select @a
