@@ -1,0 +1,24 @@
+SQL SERVER – Executing Remote Stored Procedure – Calling Stored Procedure on Linked Server
+
+This is very detailed topic, I will keep it very simple.
+
+I am making assumptions that remote server is already set up as linked server with proper permissions in application and network is arranged.
+
+Method 1 : Remote Stored Procedure can be called as four part name:
+Syntax: 
+
+EXEC [RemoteServer] .DatabaseName.DatabaseOwner.StoredProcedureName  ‘Params’
+
+
+Example: 
+
+EXEC [DEVSQL] .AdventureWorks.dbo.uspGetEmployeeManagers ’42'
+
+Method 2 : Use Distributed Query functions (OpenQuery())
+Syntax: SELECT * 
+
+FROM OPENQUERY([RemoteServer],DatabaseName.DatabaseOwner.StoredProcedureName)
+
+Example: SELECT *
+
+FROM OPENQUERY([DEVSQL],AdventureWorks.dbo.spAdmin_GetAllUsers)
