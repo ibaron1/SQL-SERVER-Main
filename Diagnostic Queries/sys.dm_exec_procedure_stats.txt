@@ -1,0 +1,3 @@
+--New in sql server 2008
+
+select * from sys.dm_exec_procedure_stats
