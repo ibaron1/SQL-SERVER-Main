@@ -1,1 +1,0 @@
-select * from sys.trigger_event_types 
