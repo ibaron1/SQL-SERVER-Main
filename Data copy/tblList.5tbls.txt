@@ -1,5 +1,0 @@
-blocks_tbl
-services_tbl
-sm_queue_tbl
-sm_area_tbl
-systems_tbl

@@ -1,1 +1,0 @@
-findstr /R /N "^.*create.*$" create_idx.sql | find /c ":"

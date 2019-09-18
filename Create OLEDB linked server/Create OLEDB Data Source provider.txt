@@ -1,5 +1,0 @@
-Sybase Home - 
-
-for example, add or modify - see BASELINE11.sod OLEDB config file, it is a text, must be in this folder for ap_addlinkedserver
-
-D:\Sybase\DataAccess64\OLEDB\DataSources
