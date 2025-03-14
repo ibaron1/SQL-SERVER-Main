@@ -1,0 +1,27 @@
+use [your db]
+go
+
+create table customer (
+     cid   int identity,
+     filler char(100)   NOT NULL, 
+)
+go
+
+declare @i int
+set @i = 1
+begin tran
+while @i <= 8000000
+begin
+      insert customer(filler)
+      select left(cast(@i % 80 as varchar(8)) + '00000000', 7) + replicate('a', 92)
+ 
+      if (@i % 10000) = 0
+      begin
+           commit tran
+           begin tran
+      end
+      select @i = @i + 1
+end
+commit tran
+
+go
