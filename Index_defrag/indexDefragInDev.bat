@@ -1,0 +1,1 @@
+sqlcmd -UTruViewAppDBO -SINDNYC5016.DEV.IMSI.COM -i"C:\IFS\TruView\Index defrag"\"index rebuild for 2005 indnyc5016.sql" -o"C:\IFS\TruView\Index defrag"\"index rebuild for 2005 indnyc5016.out" -PMoonwalk1
