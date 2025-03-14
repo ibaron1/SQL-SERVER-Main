@@ -1,0 +1,1 @@
+SELECT OBJECT_DEFINITION(OBJECT_ID('Processing.BuildTableIndexes_DataMart'))
