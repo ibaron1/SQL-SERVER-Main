@@ -1,0 +1,53 @@
+The purpose of a user-defined function (UDF) is to encapsulate logic that calculates something, possibly based on input parameters, and return a result. 
+SQL Server supports scalar and table-valued UDFs. 
+Scalar UDFs return a single value; table-valued UDFs return a table. 
+One benefit of using UDFs is that you can incorporate them into queries. 
+Scalar UDFs can appear anywhere in the query where an expression that returns a single value can appear (for example, in the SELECT list). 
+Table UDFs can appear in the FROM clause of a query.
+
+UDFs are not allowed to have any side effects. This obviously means UDFs are not allowed to apply any schema or data changes in the database. But other ways of causing side effects are less obvious.
+
+Syntax for Transact-SQL scalar functions.
+CREATE [ OR ALTER ] FUNCTION [ schema_name. ] function_name
+( [ { @parameter_name [ AS ] [ type_schema_name. ] parameter_data_type [ NULL ]
+ [ = default ] [ READONLY ] }
+    [ , ...n ]
+  ]
+)
+RETURNS return_data_type
+    [ WITH <function_option> [ , ...n ] ]
+    [ AS ]
+    BEGIN
+        function_body
+        RETURN scalar_expression
+    END
+[ ; ]
+
+Syntax for Transact-SQL inline table-valued functions.
+CREATE [ OR ALTER ] FUNCTION [ schema_name. ] function_name
+( [ { @parameter_name [ AS ] [ type_schema_name. ] parameter_data_type [ NULL ]
+    [ = default ] [ READONLY ] }
+    [ , ...n ]
+  ]
+)
+RETURNS TABLE
+    [ WITH <function_option> [ , ...n ] ]
+    [ AS ]
+    RETURN [ ( ] select_stmt [ ) ]
+[ ; ]
+
+Syntax for Transact-SQL multi-statement table-valued functions.
+CREATE [ OR ALTER ] FUNCTION [ schema_name. ] function_name
+( [ { @parameter_name [ AS ] [ type_schema_name. ] parameter_data_type [ NULL ]
+    [ = default ] [ READONLY ] }
+    [ , ...n ]
+  ]
+)
+RETURNS @return_variable TABLE <table_type_definition>
+    [ WITH <function_option> [ , ...n ] ]
+    [ AS ]
+    BEGIN
+        function_body
+        RETURN
+    END
+[ ; ]
