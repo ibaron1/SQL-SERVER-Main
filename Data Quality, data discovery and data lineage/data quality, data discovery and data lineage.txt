@@ -1,0 +1,7 @@
+
+
+Data quality is a measure of how well a data set meets certain criteria, such as accuracy, completeness, and timeliness. It's important for organizations to measure data quality to identify errors and inconsistencies, and to ensure the data is fit for its intended purpose.
+
+Data discovery is the process of analyzing and exploring data to find patterns, relationships, and insights that can improve business performance and decision making. It involves combining and transforming data from different sources, examining data structures, and applying visualization techniques
+
+Data lineage is the process of tracking the flow of data over time, from its origin to its consumption. It includes recording and visualizing all the transformations the data undergoes along the way, such as when and where it merged or separated with other data. Data lineage tools can also provide a record of source information and any data transformations that have been applied during ETL or ELT processes. 

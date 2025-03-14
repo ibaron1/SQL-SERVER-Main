@@ -1,0 +1,248 @@
+
+C:\CompareDatabase_Sql>echo on 
+
+C:\CompareDatabase_Sql>set sourceDb=deriv_cost_1 
+
+C:\CompareDatabase_Sql>set DbList=S01DER3_deriv_cost_1.clone_dbs.txt 
+
+C:\CompareDatabase_Sql>set rootDir=C:\CompareDatabases\OnSameInstance 
+
+C:\CompareDatabase_Sql>set instance=gammacase 
+
+C:\CompareDatabase_Sql>set instanceAlias=S01DER3 
+
+C:\CompareDatabase_Sql>set instancePwd=Bi75911@ 
+
+C:\CompareDatabase_Sql>set cloneDBalias=clone_db_on_S01DER3 
+
+C:\CompareDatabase_Sql>set sourceDBalias=source_db_on_S01DER3 
+
+C:\CompareDatabase_Sql>set diffObjects=C:\CompareDatabases\OnSameInstance\diffObjects 
+
+C:\CompareDatabase_Sql>set sameObjects=C:\CompareDatabases\OnSameInstance\sameObjects 
+
+C:\CompareDatabase_Sql>SET CYGWIN=nodosfilewarning  
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance (mkdir C:\CompareDatabases\OnSameInstance ) 
+
+C:\CompareDatabase_Sql>if not exist c:\tmp\diffsql (mkdir c:\tmp\diffsql ) 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\diffObjects (mkdir C:\CompareDatabases\OnSameInstance\diffObjects ) 
+
+C:\CompareDatabase_Sql>if not exist c:\tmp\samesql (mkdir c:\tmp\samesql ) 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects (mkdir C:\CompareDatabases\OnSameInstance\sameObjects ) 
+
+C:\CompareDatabase_Sql>for /F %T in (S01DER3_deriv_cost_1.clone_dbs.txt) do (CompareOneDbOnSameInstance.cmd %T deriv_cost_1 C:\CompareDatabases\OnSameInstance\diffObjects gammacase Bi75911@ C:\CompareDatabases\OnSameInstance\sameObjects clone_db_on_S01DER3 source_db_on_S01DER3 ) 
+
+C:\CompareDatabase_Sql>(CompareOneDbOnSameInstance.cmd deriv_cost_2 deriv_cost_1 C:\CompareDatabases\OnSameInstance\diffObjects gammacase Bi75911@ C:\CompareDatabases\OnSameInstance\sameObjects clone_db_on_S01DER3 source_db_on_S01DER3 ) 
+
+C:\CompareDatabase_Sql>echo on 
+
+C:\CompareDatabase_Sql>echo set nocount on   1>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select name into #t1 from deriv_cost_2..sysobjects c   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo where type='U' and not exists   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo (select '1' from deriv_cost_1..sysobjects where type='U' and name=c.name)   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo if @@rowcount != 0    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo   select ' ' as 'source_db_on_S01DER3 instance', name as  'extra tables' from #t1  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select ' '  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select name into #t2 from deriv_cost_1..sysobjects  c    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo where type='U' and not exists   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo (select '1' from deriv_cost_2..sysobjects where type='U' and name=c.name)   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo if @@rowcount != 0    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo   select ' ' as 'clone_db_on_S01DER3 instance', name as  'extra tables' from #t2  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select ' '  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select name into #p1 from deriv_cost_2..sysobjects c   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo where type='P' and not exists   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo (select '1' from deriv_cost_1..sysobjects where type='P' and name=c.name)   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo if @@rowcount != 0    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo   select ' ' as 'source_db_on_S01DER3 instance', name as  'extra procs'  from #p1  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select ' '  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select name into #p2 from deriv_cost_1..sysobjects  c    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo where type='P' and not exists   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo (select '1' from deriv_cost_2..sysobjects where type='P' and name=c.name)   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo if @@rowcount != 0    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo   select ' ' as 'clone_db_on_S01DER3 instance', name as  'extra procs' from #p2  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select ' '  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select name into #v1 from deriv_cost_2..sysobjects c   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo where type='V' and not exists   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo (select '1' from deriv_cost_1..sysobjects where type='V' and name=c.name)   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo if @@rowcount != 0    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo   select ' ' as 'source_db_on_S01DER3 instance', name as  'extra views'  from #v1  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select ' '  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select name into #v2 from deriv_cost_1..sysobjects c    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo where type='V' and not exists   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo (select '1' from deriv_cost_2..sysobjects where type='V' and name=c.name)   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo if @@rowcount != 0    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo   select ' ' as 'clone_db_on_S01DER3 instance', name as  'extra views' from #v2  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select ' '  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select name into #tr1 from deriv_cost_2..sysobjects c   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo where type='TR' and not exists   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo (select '1' from deriv_cost_1..sysobjects where type='TR' and name=c.name)   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo if @@rowcount != 0    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo   select ' ' as 'source_db_on_S01DER3 instance', name as  'extra triggers' from #tr1  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select ' '  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select name into #tr2 from deriv_cost_1..sysobjects  c    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo where type='TR' and not exists   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo (select '1' from deriv_cost_2..sysobjects where type='TR' and name=c.name)   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo if @@rowcount != 0    1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo   select ' ' as 'clone_db_on_S01DER3 instance', name as  'extra triggers' from #tr2  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo drop table #t1,#t2,#p1,#p2,#v1,#v2,#tr1,#tr2  1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo go   1>>c:\tmp\diffsql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>isql -Usa -Sgammacase -PBi75911@ -ic:\tmp\diffsql\deriv_cost_2.sql -oC:\CompareDatabases\OnSameInstance\diffObjects\deriv_cost_2.out 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2 (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2 ) 
+
+C:\CompareDatabase_Sql>echo set nocount on  1>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select c.name from deriv_cost_2..sysobjects c join deriv_cost_1..sysobjects d 1>>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo on c.name=d.name and c.type='P' and d.type='P'  1>>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo go   1>>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>isql -b -Usa -Sgammacase -PBi75911@ -ic:\tmp\samesql\deriv_cost_2.sql -oC:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs.txt 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs ) 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults ) 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3 (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3 ) 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3 (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3 ) 
+
+C:\CompareDatabase_Sql>for /F %T in (C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs.txt) do (defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\%T.sql deriv_cost_2 %T   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\%T.sql deriv_cost_2 %T   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\%T.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\%T.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\%T.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_arch.sql deriv_cost_2 cst_eng_tbl_arch   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_arch.sql deriv_cost_2 cst_eng_tbl_arch   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_arch.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_arch.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\cst_eng_tbl_arch.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_arch_wrp.sql deriv_cost_2 cst_eng_tbl_arch_wrp   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_arch_wrp.sql deriv_cost_2 cst_eng_tbl_arch_wrp   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_arch_wrp.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_arch_wrp.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\cst_eng_tbl_arch_wrp.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_purge.sql deriv_cost_2 cst_eng_tbl_purge   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_purge.sql deriv_cost_2 cst_eng_tbl_purge   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_purge.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_purge.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\cst_eng_tbl_purge.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_purg_wrp.sql deriv_cost_2 cst_eng_tbl_purg_wrp   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_purg_wrp.sql deriv_cost_2 cst_eng_tbl_purg_wrp   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_purg_wrp.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_purg_wrp.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\cst_eng_tbl_purg_wrp.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_restore.sql deriv_cost_2 cst_eng_tbl_restore   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_restore.sql deriv_cost_2 cst_eng_tbl_restore   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_restore.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_restore.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\cst_eng_tbl_restore.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_rest_wrp.sql deriv_cost_2 cst_eng_tbl_rest_wrp   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_rest_wrp.sql deriv_cost_2 cst_eng_tbl_rest_wrp   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\cst_eng_tbl_rest_wrp.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\cst_eng_tbl_rest_wrp.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\cst_eng_tbl_rest_wrp.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\trade_has_rej.sql deriv_cost_2 trade_has_rej   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\trade_has_rej.sql deriv_cost_2 trade_has_rej   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\trade_has_rej.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\trade_has_rej.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\trade_has_rej.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_input.sql deriv_cost_2 ce_input   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_input.sql deriv_cost_2 ce_input   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_input.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_input.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\ce_input.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_input_ck.sql deriv_cost_2 ce_input_ck   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_input_ck.sql deriv_cost_2 ce_input_ck   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_input_ck.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_input_ck.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\ce_input_ck.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_input_rb.sql deriv_cost_2 ce_input_rb   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_input_rb.sql deriv_cost_2 ce_input_rb   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_input_rb.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_input_rb.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\ce_input_rb.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_input_rr.sql deriv_cost_2 ce_input_rr   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_input_rr.sql deriv_cost_2 ce_input_rr   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_input_rr.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_input_rr.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\ce_input_rr.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_scrap.sql deriv_cost_2 ce_scrap   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_scrap.sql deriv_cost_2 ce_scrap   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_scrap.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_scrap.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\ce_scrap.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\get_next_instance.sql deriv_cost_2 get_next_instance   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\get_next_instance.sql deriv_cost_2 get_next_instance   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\get_next_instance.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\get_next_instance.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\get_next_instance.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\is_trade_cancelled.sql deriv_cost_2 is_trade_cancelled   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\is_trade_cancelled.sql deriv_cost_2 is_trade_cancelled   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\is_trade_cancelled.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\is_trade_cancelled.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\is_trade_cancelled.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\get_notional_value.sql deriv_cost_2 get_notional_value   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\get_notional_value.sql deriv_cost_2 get_notional_value   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\get_notional_value.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\get_notional_value.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\get_notional_value.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\haveTradesProcessed.sql deriv_cost_2 haveTradesProcessed   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\haveTradesProcessed.sql deriv_cost_2 haveTradesProcessed   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\haveTradesProcessed.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\haveTradesProcessed.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\haveTradesProcessed.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_reject_info.sql deriv_cost_2 ce_reject_info   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_reject_info.sql deriv_cost_2 ce_reject_info   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_reject_info.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_reject_info.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\ce_reject_info.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_roll_select.sql deriv_cost_2 ce_roll_select   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_roll_select.sql deriv_cost_2 ce_roll_select   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\clone_db_on_S01DER3\ce_roll_select.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\source_db_on_S01DER3\ce_roll_select.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\procs\_CompareResults\ce_roll_select.txt ) 
+
+C:\CompareDatabase_Sql>echo set nocount on  1>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select c.name from deriv_cost_2..sysobjects c join deriv_cost_1..sysobjects d 1>>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo on c.name=d.name and c.type='V' and d.type='V' and  ltrim(rtrim(d.name)) != 'sysquerymetrics'   1>>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo go   1>>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>isql -b -Usa -Sgammacase -PBi75911@ -ic:\tmp\samesql\deriv_cost_2.sql -oC:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views.txt 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views ) 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views\_CompareResults (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views\_CompareResults ) 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views\clone_db_on_S01DER3 (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views\clone_db_on_S01DER3 ) 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views\source_db_on_S01DER3 (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views\source_db_on_S01DER3 ) 
+
+C:\CompareDatabase_Sql>for /F %T in (C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views.txt) do (defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views\clone_db_on_S01DER3\%T.sql deriv_cost_2 %T   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views\source_db_on_S01DER3\%T.sql deriv_cost_2 %T   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views\clone_db_on_S01DER3\%T.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views\source_db_on_S01DER3\%T.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\views\_CompareResults\%T.txt ) 
+
+C:\CompareDatabase_Sql>echo set nocount on  1>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo select c.name from deriv_cost_2..sysobjects c join deriv_cost_1..sysobjects d 1>>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo on c.name=d.name and c.type='TR' and d.type='TR'  1>>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>echo go   1>>c:\tmp\samesql\deriv_cost_2.sql 
+
+C:\CompareDatabase_Sql>isql -b -Usa -Sgammacase -PBi75911@ -ic:\tmp\samesql\deriv_cost_2.sql -oC:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers.txt 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers ) 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\_CompareResults (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\_CompareResults ) 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3 (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3 ) 
+
+C:\CompareDatabase_Sql>if not exist C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3 (mkdir C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3 ) 
+
+C:\CompareDatabase_Sql>for /F %T in (C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers.txt) do (defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3\%T.sql deriv_cost_2 %T   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3\%T.sql deriv_cost_2 %T   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3\%T.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3\%T.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\_CompareResults\%T.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3\rel_ord_rback_tr.sql deriv_cost_2 rel_ord_rback_tr   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3\rel_ord_rback_tr.sql deriv_cost_2 rel_ord_rback_tr   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3\rel_ord_rback_tr.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3\rel_ord_rback_tr.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\_CompareResults\rel_ord_rback_tr.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3\wrhs_entry_1_tr.sql deriv_cost_2 wrhs_entry_1_tr   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3\wrhs_entry_1_tr.sql deriv_cost_2 wrhs_entry_1_tr   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3\wrhs_entry_1_tr.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3\wrhs_entry_1_tr.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\_CompareResults\wrhs_entry_1_tr.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3\rel_ord_out_tr.sql deriv_cost_2 rel_ord_out_tr   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3\rel_ord_out_tr.sql deriv_cost_2 rel_ord_out_tr   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3\rel_ord_out_tr.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3\rel_ord_out_tr.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\_CompareResults\rel_ord_out_tr.txt ) 
+
+C:\CompareDatabase_Sql>(defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3\rel_ord_in_tr.sql deriv_cost_2 rel_ord_in_tr   & defncopy -Usa -Sgammacase -PBi75911@ out C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3\rel_ord_in_tr.sql deriv_cost_2 rel_ord_in_tr   & diff -i -w -E C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\clone_db_on_S01DER3\rel_ord_in_tr.sql C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\source_db_on_S01DER3\rel_ord_in_tr.sql  1>C:\CompareDatabases\OnSameInstance\sameObjects\deriv_cost_2\triggers\_CompareResults\rel_ord_in_tr.txt ) 

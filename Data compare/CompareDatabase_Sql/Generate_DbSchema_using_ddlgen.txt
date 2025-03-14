@@ -1,0 +1,63 @@
+set P=Bi75911@
+
+rem Generate The Whole Database
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -TDB -Dprds_prod -Oprds_prod.schema.sql -Lprds_prod.log -Eprds_prod.err
+
+
+rem Generate By Object Type for large number of objects
+
+rem RemoteServers
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TRS -Nprds_prod.% -Oprds_prod.RemoteServers.sql -Lprds_prod.RemoteServers.log -Eprds_prod.RemoteServers.err
+
+rem Logins
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TL -Nprds_prod.% -Oprds_prod.Logins.sql -Lprds_prod.Logins.log -Eprds_prod.Logins.err
+
+rem Groups
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -Dprds_prod -TGRP -Nprds_prod.% -Oprds_prod.Groups.sql -Lprds_prod.Groups.log -Eprds_prod.Groups.err
+
+rem Users
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TUSR -Nprds_prod.% -Oprds_prod.Users.sql -Lprds_prod.Users.log -Eprds_prod.Users.err
+
+rem Roles
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TRO -Nprds_prod.% -Oprds_prod.Roles.sql -Lprds_prod.Roles.log -Eprds_prod.Roles.err
+
+rem Defaults 
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TD -Nprds_prod.% -Oprds_prod.Defaults.sql -Lprds_prod.Defaults.log -Eprds_prod.Defaults.err
+
+rem rule
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TR -Nprds_prod.% -Oprds_prod.rule.sql -Lprds_prod.rule.log -Eprds_prod.rule.err
+
+rem UDD
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TUDD -Nprds_prod.% -Oprds_prod.UDD.sql -Lprds_prod.UDD.log -Eprds_prod.UDD.err
+
+rem Segments
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TSGM -Nprds_prod.% -Oprds_prod.Segments.sql -Lprds_prod.Segments.log -Eprds_prod.Segments.err
+
+rem Tables including indexes and RI
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TU -Nprds_prod.dbo.% -FTR -Oprds_prod.Tables.sql -Lprds_prod.Tables.log -Eprds_prod.Tables.err
+
+rem KeyConstraints
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TKC -Nprds_prod.dbo.% -Oprds_prod.KeyConstraints.sql -Lprds_prod.KeyConstraints.log -Eprds_prod.KeyConstraints.err
+
+rem LogicalKeys
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TLK -Nprds_prod.dbo.% -Oprds_prod.LogicalKeys.sql -Lprds_prod.LogicalKeys.log -Eprds_prod.LogicalKeys.err
+
+rem Views
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TV -Nprds_prod.dbo.% -Oprds_prod.Views.sql -Lprds_prod.Views.log -Eprds_prod.Views.err
+
+rem Triggers
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TTR -Nprds_prod.dbo.% -Oprds_prod.Triggers.sql -Lprds_prod.Triggers.log -Eprds_prod.Triggers.err
+
+rem Procedures
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TP -Nprds_prod.dbo.% -Oprds_prod.Procedures.sql -Lprds_prod.Procedures.log -Eprds_prod.Procedures.err
+
+rem ExtendedProcs
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TXP -Nprds_prod.dbo.% -Oprds_prod.ExtendedProcs.sql -Lprds_prod.ExtendedProcs.log -Eprds_prod.ExtendedProcs.err
+
+rem UserDefinedWebService
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TWS -Nprds_prod.% -Oprds_prod.UserDefinedWebService.sql -Lprds_prod.UserDefinedWebService.log -Eprds_prod.UserDefinedWebService.err
+
+rem WebServiceConsumer
+C:\sybase\ASEP\bin\ddlgen -Usa -SGAMMA8k -P%P% -TWSC -Nprds_prod.% -Oprds_prod.WebServiceConsumer.sql -Lprds_prod.WebServiceConsumer.log -Eprds_prod.WebServiceConsumer.err
+
+
