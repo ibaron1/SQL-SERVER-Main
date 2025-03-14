@@ -1,0 +1,26 @@
+								
+classname	priority	engine_group	engines					
+EC1	HIGH	ANYENGINE	ALL					
+EC2	MEDIUM	ANYENGINE	ALL					
+EC3	LOW	LASTONLINE	23					
+ADHOC	MEDIUM	EC3	8,9,10,11,12,13,14,15					
+RepClass	HIGH	ANYENGINE	ALL					
+(return status = 0)								
+								
+type	object_name	scope	exec_class	engine_group	engines	spid	attribute	attribute_value
+LG	rep_maint	[NULL]	RepClass	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlW	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlR	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlW3	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlR3	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlW4	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlR4	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlW7	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlR7	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlWD	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlRD	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlR5	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+LG	GLSQryTlW5	[NULL]	ADHOC	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+EG	[NULL]	[NULL]	[NULL]	EC3	8,9,10,11,12,13,14,15	[NULL]	[NULL]	[NULL]
+(return status = 0)								
+								

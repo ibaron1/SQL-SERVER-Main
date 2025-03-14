@@ -1,0 +1,13 @@
+To ignore error, capture it and continue yse
+
+begin try
+end try
+begin catch
+end catch
+
+inside loops
+
+capture error and log it, do not use Throw or Raiserror - both will stop execution
+
+check the execution log for error and throw error at the end of a run - ask Jim or R whatever app guy if they can catch Throw or need Raiserror
+

@@ -1,0 +1,12 @@
+								
+classname	priority	engine_group	engines					
+EC1	HIGH	ANYENGINE	ALL					
+EC2	MEDIUM	ANYENGINE	ALL					
+EC3	LOW	LASTONLINE	9					
+RepClass	HIGH	ANYENGINE	ALL					
+(return status = 0)								
+								
+type	object_name	scope	exec_class	engine_group	engines	spid	attribute	attribute_value
+LG	rep_maint	[NULL]	RepClass	[NULL]	[NULL]	[NULL]	[NULL]	[NULL]
+(return status = 0)								
+								

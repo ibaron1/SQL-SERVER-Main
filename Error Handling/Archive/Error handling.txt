@@ -1,0 +1,39 @@
+BEGIN TRY  
+    -- Generate a divide-by-zero error.  
+    SELECT 1/0;  
+END TRY  
+BEGIN CATCH  
+    SELECT  
+        ERROR_NUMBER() AS ErrorNumber,  
+        ERROR_SEVERITY() AS ErrorSeverity,  
+        ERROR_STATE() AS ErrorState,  
+        ERROR_PROCEDURE() AS ErrorProcedure,  
+        ERROR_LINE() AS ErrorLine,  
+        ERROR_MESSAGE() AS ErrorMessage;  
+
+--You can specify -1 to return the severity value associated with the error
+RAISERROR (15600, -1, -1, 'mysp_CreateCustomer');
+
+END CATCH;  
+GO  
+
+
+BEGIN TRY  
+    -- Generate a divide-by-zero error.  
+    SELECT 1/0;  
+END TRY  
+BEGIN CATCH  
+    SELECT  --to fit into 1 column
+      concat('ErrorNumber: ',ERROR_NUMBER(),  
+             ' ErrorSeverity: ',ERROR_SEVERITY(), 
+			 ' ErrorState: ',ERROR_STATE(),  
+             ' ErrorProcedure: ',ERROR_PROCEDURE(),   
+             ' ErrorLine: ',  ERROR_LINE(),
+             ' ErrorMessage: ',ERROR_MESSAGE()) ;  
+
+--You can specify -1 to return the severity value associated with the error
+RAISERROR (15600, -1, -1, 'mysp_CreateCustomer');
+
+END CATCH;  
+GO  
+

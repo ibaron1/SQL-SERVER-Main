@@ -1,0 +1,3 @@
+https://dbatools.io/
+
+https://docs.dbatools.io/Invoke-DbaDiagnosticQuery.html
