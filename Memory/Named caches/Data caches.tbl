@@ -1,0 +1,8 @@
+select * from master..monDataCache
+-- Provides statistics relating to data cache usage
+
+select * from master..monCachedObject
+-- Provides statistics for all objects and indexes that currently have pages cached within a data cache
+
+select * from master..monCachePool
+-- Provides statistics for all pools allocated for all caches

@@ -1,0 +1,88 @@
+SQL Server provides tools for getting information about the metadata of objects, such as information about tables in a database and columns in a table. Those tools include catalog views, information schema views, and system stored procedures and functions. This area is documented well in the product documentation in the “Querying the SQL Server System Catalog” section,
+
+Catalog views
+---------------
+For example, if you want to list the tables in a database along with their schema names-
+
+SELECT SCHEMA_NAME(schema_id) AS table_schema_name, name AS table_name
+FROM sys.tables;
+
+To get information about columns in a table, you can query the sys.columns table-
+
+SELECT
+  name AS column_name,
+  TYPE_NAME(system_type_id) AS column_type,
+  max_length,
+  collation_name,
+  is_nullable
+FROM sys.columns
+WHERE object_id = OBJECT_ID(N'Sales.Orders');
+
+Information schema views
+------------------------ 
+SQL Server supports a set of views that reside in a schema called INFORMATION_SCHEMA and provide metadata information in a standard manner. That is, the views are defined in the SQL standard, so naturally they don’t cover metadata aspects or objects specific to SQL Server (such as indexing). For example, the following query against the INFORMATION_SCHEMA.TABLES view lists the base tables in the current database along with their schema names:
+
+SELECT TABLE_SCHEMA, TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = N'BASE TABLE'; 
+
+The following query against the INFORMATION_SCHEMA.COLUMNS view provides most of the available information about columns in the Sales.Orders table:
+
+SELECT
+  COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH,
+  COLLATION_NAME, IS_NULLABLE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_SCHEMA = N'Sales'
+  AND TABLE_NAME = N'Orders';
+
+System stored procedures and functions
+--------------------------------------- 
+System stored procedures and functions internally query the system catalog and return more “digested” metadata information.
+
+The sp_tables stored procedure returns a list of objects (such as tables and views) that can be queried in the current database: 
+EXEC sys.sp_tables; 
+
+The sp_help procedure accepts an object name as input and returns multiple result sets with general information about the object, and also information about columns, indexes, constraints, and more. For example, the following code returns detailed information about the Orders table: 
+EXEC sys.sp_help
+  @objname = N'Sales.Orders';
+
+The sp_columns procedure returns information about columns in an object. For example, the following code returns information about columns in the Orders table: 
+EXEC sys.sp_columns
+  @table_name = N'Orders',
+  @table_owner = N'Sales'; 
+
+The sp_helpconstraint procedure returns information about constraints in an object. For example, the following code returns information about constraints in the Orders table: 
+EXEC sys.sp_helpconstraint
+  @objname = N'Sales.Orders'; 
+
+One set of functions returns information about properties of entities such as the SQL Server instance, database, object, column, and so on. The SERVERPROPERTY function returns the requested property of the current instance. For example, the following code returns the collation of the current instance: 
+
+SELECT
+  SERVERPROPERTY('Collation');
+
+The DATABASEPROPERTYEX function returns the requested property of the specified database name. For example, the following code returns the collation of the TSQLV6 database:
+SELECT
+  DATABASEPROPERTYEX(N'TSQLV6', 'Collation'); 
+
+The OBJECTPROPERTY function returns the requested property of the specified object name. For example, the output of the following code indicates whether the Orders table has a primary key: 
+SELECT
+  OBJECTPROPERTY(OBJECT_ID(N'Sales.Orders'), 'TableHasPrimaryKey'); 
+Notice the nesting of the function OBJECT_ID within OBJECTPROPERTY. The OBJECTPROPERTY function expects an object ID and not a name, so the OBJECT_ID function is used to return the ID of the Orders table. 
+
+The COLUMNPROPERTY function returns the requested property of a specified column. For example, the output of the following code indicates whether the shipcountry column in the Orders table is nullable: 
+SELECT
+  COLUMNPROPERTY(OBJECT_ID(N'Sales.Orders'), N'shipcountry', 'AllowsNull');
+
+Functions
+---------
+
+SELECT DEFINITION,
+    type
+FROM sys.sql_modules AS m
+INNER JOIN sys.objects AS o
+    ON m.object_id = o.object_id
+    AND type IN ('FN', 'IF', 'TF');
+
+
+
+
