@@ -1,0 +1,63 @@
+
+-----------------------------------------------------------------------------------------------------------
+insert into capax..sybtosql_queue (sybsrvname,sybdbname,sybtablename,sqldbname,sqltablename)
+values ('BASELINE0508','ran_dashboard_prod','user_tbl','ran_dashboard_prod','user_tbl') 
+5:50:27 PM
+
+/*
+Generate sql to insert rows into sybtosql_queue table, that's all - there are SQL Agent jobs
+to to start the copy
+*/
+
+set quoted_identifier off
+go
+declare @sybsrvname varchar(40) = 'BASELINE04R',
+@sybdbname varchar(50) = 'reDG_prod',
+@sqldbname varchar(50) = 'reDG_prod'
+select "
+insert into capax..sybtosql_queue (sybsrvname,sybdbname,sybtablename,sqldbname,sqltablename)
+values ('" + @sybsrvname + "','" + @sybdbname + "','" + name + "','" + @sqldbname + "','" + name + "')"
+from sys.tables
+go
+ 
+
+-----------------------Check the status of data copy ---------------------------------------
+-- Summary - at a glance
+select * from
+(select min(sybsrvname) as sybsrvname, min(sybdbname) as sybdbname,
+status, count(sybtablename) as sybtable_count,
+count(sqltablename) as sqltable_count,
+sum(sybaserows) as total_sybaserows,
+sum(sqlrows) as total_sqlrows, min(starttime) as datacopy_started, 
+max(endtime) as datacopy_last_time,
+min(GETDATE()) as time_now
+from capax..sybtosql_queue
+where sybdbname='rannuity_pruwf_prod'
+group by status) t
+order by sybtable_count
+compute sum(sybtable_count)
+
+-- Details
+select runid,sybsrvname, sybdbname,sybtablename,
+status,sybaserows,sqlrows, queuedtime, starttime, endtime, 
+DATEDIFF(MI,starttime,endtime) as runtime_min 
+from capax..sybtosql_queue
+where sybdbname='rannuity_pruwf_prod'
+order by status 
+compute count(sybtablename), sum(sqlrows), sum(DATEDIFF(MI,starttime,endtime)) --total for run time
+by status 
+
+
+
+-- what is running or errors
+select * from capax..sybtosql_queue
+where status not in ('Waiting','Success') 
+
+
+/*
+In case there is a wrong password then everything will be in 
+*/
+
+update capax..sybtosql_queue
+set status='Waiting'
+where runid>31 -- or anything else like db name to identify a specific database to copy the data to
