@@ -1,0 +1,1 @@
+bcp "exec FALCON_UAT3.[Realtime].[usp_RRC_Commodities_Extract] '2013-09-03', '2013-09-04'" queryout RRC_Commodities_Extract.txt -S"cit-falcon-db-uat\CMD_FLOW1_UAT" -T -c
