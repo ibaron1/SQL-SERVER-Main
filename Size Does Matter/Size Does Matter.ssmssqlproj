@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Size Does Matter">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items />
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="00.DB Creation.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>00.DB Creation.sql</FullPath>
+        </FileNode>
+        <FileNode Name="03.IFI Demo.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>03.IFI Demo.sql</FullPath>
+        </FileNode>
+        <FileNode Name="04.Detecting Space Consumers.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>04.Detecting Space Consumers.sql</FullPath>
+        </FileNode>
+        <FileNode Name="05.Fragmentation.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>05.Fragmentation.sql</FullPath>
+        </FileNode>
+        <FileNode Name="06.Compression.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>06.Compression.sql</FullPath>
+        </FileNode>
+        <FileNode Name="07.LOB Compression.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>07.LOB Compression.sql</FullPath>
+        </FileNode>
+        <FileNode Name="08.LOB Compression (Legacy).sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>08.LOB Compression (Legacy).sql</FullPath>
+        </FileNode>
+        <FileNode Name="09.Unused Indexes.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>09.Unused Indexes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="10.Redundant Indexes.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>10.Redundant Indexes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="11.Columnstore Indexes.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>11.Columnstore Indexes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="19.Alteration.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>19.Alteration.sql</FullPath>
+        </FileNode>
+        <FileNode Name="20.1.Moving Data (1).sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>20.1.Moving Data (1).sql</FullPath>
+        </FileNode>
+        <FileNode Name="20.2.Moving Data (2).sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>20.2.Moving Data (2).sql</FullPath>
+        </FileNode>
+        <FileNode Name="31.Table Info.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>31.Table Info.sql</FullPath>
+        </FileNode>
+        <FileNode Name="32.Wait Stats.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>32.Wait Stats.sql</FullPath>
+        </FileNode>
+        <FileNode Name="50.Monitoring Page Splits.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>50.Monitoring Page Splits.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>
