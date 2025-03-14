@@ -1,0 +1,41 @@
+A window function is a function that, for each row, computes a scalar result value based on a calculation against a subset of the rows from the underlying query. 
+The subset of rows is known as a window and is based on a window descriptor that relates to the current row. 
+The syntax for window functions uses a clause called OVER, in which you provide the window specification.
+
+If this sounds too technical, simply think of the need to perform a calculation against a set and return a single value. 
+A classic example is aggregate calculations—such as SUM, COUNT, and AVG—but there are others as well, such as ranking and offset functions. 
+You’re familiar already with a couple of ways to apply aggregate calculations—one is by using grouped queries, and another is by using subqueries. However, both options have shortcomings that window functions elegantly resolve.
+
+A window function is evaluated per detailed row, and it’s applied to a subset of rows that is derived from the underlying query result set. The result of the window function is a scalar value, which is added as another column to the query result. In other words, unlike grouped functions, window functions don’t cause you to lose the detail. For example, suppose you want to query order values and return the current order value and the percent it constitutes out of the customer total. If you group by the customer, you can get only the customer total. With a window function, you can return the customer total in addition to the detail order value, and you can even compute the percent of the current order value out of the customer total.
+
+Another benefit of using window functions is that you gain the ability to define order, when applicable, as part of the specification of the calculation. This does not conflict with relational aspects of the result. That is, order is defined for the calculation and not confused with presentation ordering. The ordering specification for the window function, if applicable, is different from the ordering specification for presentation. If you don’t include a presentation ORDER BY clause, you have no assurances that the result will be returned in a particular order. If you do decide to force a certain presentation ordering, the resulting ordering can be different than the ordering for the window function. Following is an example of a query against the Sales.EmpOrders view in the TSQLV6 database that uses a window aggregate function to compute the running-total values for each employee and month: Click here to view code image USE TSQLV6;
+
+SELECT empid, ordermonth, val,
+  SUM(val) OVER(PARTITION BY empid
+                ORDER BY ordermonth
+                ROWS BETWEEN UNBOUNDED PRECEDING
+AND CURRENT ROW) AS runval
+FROM Sales.EmpOrders; 
+
+Here’s the output of this query, shown in abbreviated form: 
+------ ----------- -------- ----------
+1      2020-07-01  1614.88  1614.88
+1      2020-08-01  5555.90  7170.78
+1      2020-09-01  6651.00  13821.78
+1      2020-10-01  3933.18  17754.96
+1      2020-11-01  9562.65  27317.61
+...
+2      2020-07-01  1176.00  1176.00
+2      2020-08-01  1814.00  2990.00
+2      2020-09-01  2950.80  5940.80
+
+2      2020-10-01  5164.00  11104.80
+2      2020-11-01  4614.58  15719.38
+...
+
+(192 rows affected)
+
+Ben-Gan, Itzik. T-SQL Fundamentals (Developer Reference) (pp. 232-233). Pearson Education. Kindle Edition. 
+
+
+

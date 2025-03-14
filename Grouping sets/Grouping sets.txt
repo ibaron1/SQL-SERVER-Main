@@ -1,0 +1,146 @@
+A grouping set is a set of expressions you group the data by in a grouped query (a query with a GROUP BY clause). The reason for using the term “set” here is that there’s no significance to the order in which you specify the expressions in the GROUP BY clause. Traditionally in SQL, a single grouped query defines a single grouping set.
+
+For example, each of the following four queries defines a different single grouping set: 
+SELECT empid, custid, SUM(qty) AS sumqty
+FROM dbo.Orders
+GROUP BY empid, custid;
+
+SELECT empid, SUM(qty) AS sumqty
+FROM dbo.Orders
+GROUP BY empid;
+
+SELECT custid, SUM(qty) AS sumqty
+FROM dbo.Orders
+GROUP BY custid;
+
+SELECT SUM(qty) AS sumqty
+FROM dbo.Orders;
+
+The first query defines the grouping set (empid, custid); the second (empid), the third (custid), and the last query define what’s known as the empty grouping set, (). This code returns four result sets—one for each of the four queries.
+
+separate result sets returned, you want a single unified result set. You can achieve this by using the UNION ALL operator between the queries, after planting NULLs as placeholders for columns that appear in one query but not others. Here’s what the code looks like: Click here to view code image SELECT empid, custid, SUM(qty) AS sumqty
+FROM dbo.Orders
+GROUP BY empid, custid
+
+UNION ALL
+
+SELECT empid, NULL, SUM(qty) AS sumqty
+FROM dbo.Orders
+GROUP BY empid
+
+UNION ALL
+
+SELECT NULL, custid, SUM(qty) AS sumqty
+FROM dbo.Orders
+GROUP BY custid
+
+UNION ALL
+
+SELECT NULL, NULL, SUM(qty) AS sumqty
+FROM dbo.Orders; 
+
+This code generates a single result set with the aggregates for all four groupings: 
+empid       custid    sumqty
+----------- --------- -----------
+2           A         52
+3           A         20
+1           B         20
+2           B         27
+1           C         34
+3           C         22
+3           D         30
+1           NULL      54
+2           NULL      79
+3           NULL      72
+NULL        A         72
+NULL        B         47
+NULL        C         56
+
+Even though you managed to get what you were after, this solution has two main problems—the length of the code and performance. It’s long because you have a separate query for each grouping set. Also, SQL Server needs to apply a separate scanning of the data for each query. T-SQL supports standard features you can use to define multiple grouping sets in the same query. Those are the GROUPING SETS, CUBE, and ROLLUP subclauses of the GROUP BY clause, and the GROUPING and GROUPING_ID functions.
+
+
+The GROUPING SETS subclause is a powerful enhancement to the GROUP BY clause. You can use it to define multiple grouping sets in the same query. Simply list the grouping sets you want, separated by commas within the parentheses of the GROUPING SETS subclause, and for each grouping set list the members, separated by commas, within parentheses. For example, the following query defines four grouping sets: (empid, custid), (empid), (custid), and ():
+
+SELECT empid, custid, SUM(qty) AS sumqty
+FROM dbo.Orders
+GROUP BY
+  GROUPING SETS
+  (
+    (empid, custid),
+    (empid),
+    (custid),
+    ()
+  ); 
+The last grouping set is the empty grouping set representing the grand total. This query is a logical equivalent of the previous solution that unified the result sets of four aggregate queries. Only this one is much shorter, plus it gets optimized better. SQL Server typically needs fewer scans of the data than the number of grouping sets because it can roll up aggregates internally.
+
+The CUBE subclause of the GROUP BY clause provides an abbreviated
+
+way to define multiple grouping sets. In the parentheses of the CUBE subclause, you provide a set of members separated by commas, and you get all possible grouping sets that can be defined based on the input members. For example, CUBE(a, b, c) is equivalent to GROUPING SETS( (a, b, c), (a, b), (a, c), (b, c), (a), (b), (c), () ). In set theory, the set of all subsets of elements that can be produced from a particular set is called the power set. You can think of the CUBE subclause as producing the power set of grouping sets that can be formed from the given set of elements. Instead of using the GROUPING SETS subclause in the previous query to define the four grouping sets (empid, custid), (empid), (custid), and (), you can simply use CUBE(empid, custid). Here’s the complete query: 
+
+SELECT empid, custid, SUM(qty) AS sumqty
+FROM dbo.Orders
+GROUP BY CUBE(empid, custid);
+
+The ROLLUP subclause of the GROUP BY clause also provides an abbreviated way to define multiple grouping sets. However, unlike the CUBE subclause, ROLLUP doesn’t produce all possible grouping sets. ROLLUP assumes a hierarchy among the input members and produces only grouping sets that form leading combinations of the input members. For example, whereas CUBE(a, b, c) produces all eight possible grouping sets, ROLLUP(a, b, c) produces only four based on the hierarchy a>b>c. It is the equivalent of specifying GROUPING SETS( (a, b, c), (a, b), (a), () ). For example, suppose you want to return total quantities for all grouping sets that can be defined based on the time hierarchy of order year, order month, order day. You can use the GROUPING SETS subclause and explicitly list all four possible grouping sets: 
+  (YEAR(orderdate), MONTH(orderdate), DAY(orderdate)),
+  (YEAR(orderdate), MONTH(orderdate)),
+  (YEAR(orderdate)),
+  () ) The logical equivalent that uses the ROLLUP subclause is much more concise: 
+
+ROLLUP(YEAR(orderdate), MONTH(orderdate), DAY(orderdate)) Here’s the complete query you need to run:
+
+SELECT
+  YEAR(orderdate) AS orderyear,
+  MONTH(orderdate) AS ordermonth,
+  DAY(orderdate) AS orderday,
+  SUM(qty) AS sumqty
+FROM dbo.Orders
+GROUP BY ROLLUP(YEAR(orderdate), MONTH(orderdate), DAY(orderdate));
+
+
+The GROUPING and GROUPING_ID functions When you have a single query that defines multiple grouping sets, you might need to associate result rows and grouping sets. As long as all grouping elements are defined as NOT NULL, this is easy. For example, consider the following query: 
+
+SELECT empid, custid, SUM(qty) AS sumqty
+FROM dbo.Orders
+GROUP BY CUBE(empid, custid);
+
+empid       custid    sumqty
+----------- --------- -----------
+2           A         52
+3           A         20
+NULL        A         72
+1           B         20
+2           B         27
+NULL        B         47
+1           C         34
+3           C         22
+NULL        C         56
+3           D         30
+NULL        D         30
+NULL        NULL      205
+1           NULL      54
+2           NULL      79
+3           NULL      72
+
+Because both the empid and custid columns were defined in the dbo.Orders table as NOT NULL, a NULL in those columns can only represent a placeholder, indicating that the column did not participate in the current grouping set. For example, all rows in which empid is not NULL and custid is not NULL are associated with the grouping set (empid, custid). All rows in which empid is not NULL and custid is NULL are associated with the grouping set (empid), and so on.
+ 
+However, if a grouping column allows NULLs in the table, you cannot tell for sure whether a NULL in the result set originated from the data or is a placeholder for a nonparticipating member in a grouping set. One way to solve this problem is to use the GROUPING function. This function accepts a name of a column and returns 0 if it is a member of the current grouping set (a detail element) and 1 otherwise (an aggregate element).
+
+For example, the following query invokes the GROUPING function for each of the grouping elements: 
+
+SELECT
+  GROUPING(empid) AS grpemp,
+  GROUPING(custid) AS grpcust,
+  empid, custid, SUM(qty) AS sumqty
+  FROM dbo.Orders
+GROUP BY CUBE(empid, custid);
+
+T-SQL supports another function, called GROUPING_ID, that can further simplify the process of associating result rows and grouping sets. You provide the function with all elements that participate in any grouping set as inputs—for example, GROUPING_ID(a, b, c, d)—and the function returns an integer bitmap in which each bit represents a different input element—the rightmost element represented by the rightmost bit.
+
+SELECT
+  GROUPING_ID(empid, custid) AS groupingset,
+  empid, custid, SUM(qty) AS sumqty
+FROM dbo.Orders
+GROUP BY CUBE(empid, custid);
+
+

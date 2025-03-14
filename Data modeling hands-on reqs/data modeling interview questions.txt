@@ -1,0 +1,4 @@
+https://www.simplilearn.com/data-modeling-interview-question-and-answers-article
+
+https://blog.devart.com/what-is-azure-sql.html#:~:text=Azure%20SQL%20Database%20offers%20several,%2C%20security%2C%20and%20business%20continuity.&text=The%20choice%20depends%20on%20your%20business%20requirements%20for%20storage%20and%20performance.
+

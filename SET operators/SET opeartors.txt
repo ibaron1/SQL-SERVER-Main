@@ -1,0 +1,40 @@
+UNION, UNION ALL, INTERSECT, and EXCEPT.
+
+The general form of a query with a set operator is as follows: Input Query1
+<set_operator>
+Input Query2
+[ORDER BY ...];
+
+Because a set operator expects multisets as inputs, the two queries involved cannot have ORDER BY clauses. Remember that a query with an ORDER BY clause does not return a multiset—it returns an ordered result. However, although the queries involved cannot have ORDER BY clauses, you can optionally add an ORDER BY clause to the result of the operator.
+
+
+The names of the columns in the result are determined by the first query; therefore, if you need to assign aliases to result columns, you should assign those in the first query. Still, it’s considered a best practice
+to make sure that all columns have names in both queries, and that the names of the corresponding columns are the same.
+
+The INTERSECT operator returns only the rows that are common to the results of the two input queries.
+The INTERSECT operator (implied DISTINCT) returns only distinct rows that appear in both input query results. As long as a row appears at least once in both query results, it’s returned only once in the operator’s result.
+
+The EXCEPT operator implements a minus, or a set difference, operation. It operates on the results of two input queries and returns rows that appear in the first input but not the second.
+The EXCEPT operator (implied DISTINCT) returns only distinct rows that appear in the first set but not the second.
+
+Precedence 
+----------
+SQL defines precedence among set operators. The INTERSECT operator precedes UNION and EXCEPT, and UNION and EXCEPT are evaluated in order of appearance.
+To control the order of evaluation of set operators, use parentheses, because they have the highest precedence.
+
+(SELECT country, region, city FROM Production.Suppliers
+ EXCEPT
+ SELECT country, region, city FROM HR.Employees)
+INTERSECT
+SELECT country, region, city FROM Sales.Customers; This query returns the following output:        
+region          city
+--------------- --------------- ---------------
+Canada          Québec          Montréal
+France          NULL            Paris
+Germany         NULL            Berlin
+
+distinct predicate
+------------------
+in sql server 2022 there is distinct predicate which 
+IS [NOT] DISTINCT FROM 
+will always return true or false, as it will treat NULL values as known values when used as a comparison operator.

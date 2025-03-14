@@ -1,0 +1,1 @@
+The CHARINDEX function The CHARINDEX function returns the position of the first occurrence of a substring within a string. Syntax CHARINDEX(substring, string[, start_pos])

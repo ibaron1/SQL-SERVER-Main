@@ -1,0 +1,61 @@
+
+-- Suppress messages indicating how many rows were affected
+SET NOCOUNT ON;
+
+-- Declare table variable to hold the final result
+DECLARE @Result AS TABLE
+(
+  custid     INT,
+  ordermonth DATE,
+  qty        INT,
+  runqty     INT,
+  PRIMARY KEY(custid, ordermonth)
+);
+
+-- Declare local variables that are used to store intermediate values
+DECLARE
+  @custid     AS INT,
+  @prvcustid  AS INT,
+  @ordermonth AS DATE,
+  @qty        AS INT,
+  @runqty     AS INT;
+
+-- Step 1: Declare the cursor based on a query
+DECLARE C CURSOR FAST_FORWARD /* read only, forward only */ FOR
+  SELECT custid, ordermonth, qty
+  FROM Sales.CustOrders
+  ORDER BY custid, ordermonth;
+
+-- Step 2: Open the cursor
+OPEN C;
+
+-- Step 3: Fetch attribute values from the first cursor record into variables
+
+FETCH NEXT FROM C INTO @custid, @ordermonth, @qty;
+
+-- Initialize variables
+SELECT @prvcustid = @custid, @runqty = 0;
+
+-- Step 4: Loop through the cursor records while last fetch was successful
+--         In each iteration:
+--           Reset variables if customer ID changes
+--           Compute current running total and insert into table variable
+--           Fetch next cursor record
+WHILE @@FETCH_STATUS = 0
+BEGIN
+  IF @custid <> @prvcustid
+    SELECT @prvcustid = @custid, @runqty = 0;
+
+  SET @runqty = @runqty + @qty;
+
+  INSERT INTO @Result VALUES(@custid, @ordermonth, @qty, @runqty);
+
+  FETCH NEXT FROM C INTO @custid, @ordermonth, @qty;
+END;
+
+-- Step 5: Close the cursor
+CLOSE C;
+
+-- Step 6: Deallocate the cursor
+DEALLOCATE C;
+

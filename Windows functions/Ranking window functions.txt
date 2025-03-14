@@ -1,0 +1,54 @@
+Ranking window functions
+------------------------
+
+T-SQL supports four ranking functions: ROW_NUMBER, RANK, DENSE_RANK, and NTILE. The following query demonstrates the use of these functions: 
+
+SELECT orderid, custid, val,
+  ROW_NUMBER() OVER(ORDER BY val) AS rownum,
+  RANK()       OVER(ORDER BY val) AS rank,
+  DENSE_RANK() OVER(ORDER BY val) AS dense_rank,
+  NTILE(10)    OVER(ORDER BY val) AS ntile
+FROM Sales.OrderValues
+ORDER BY val; 
+
+This query generates the following output, shown here in abbreviated form:
+
+orderid     custid      val       rownum  rank    dense_rank ntile
+----------- ----------- --------- ------- ------- ---------- -----
+10782       12          12.50     1       1       1          1
+10807       27          18.40     2       2       2          1
+10586       66          23.80     3       3       3          1
+10767       76          28.00     4       4       4          1
+10898       54          30.00     5       5       5          1
+10900       88          33.75     6       6       6          1
+10883       48          36.00     7       7       7          1
+11051       41          36.00     8       7       7          1
+10815       71          40.00     9       9       8          1
+10674       38          45.00     10      10      9          1
+...
+(830 rows affected)
+
+The ROW_NUMBER function assigns incremental sequential integers to the rows in the query result based on the mandatory window ordering.
+
+However, even when the ordering value doesn’t increase, the row number still must increase. Therefore, if the ROW_NUMBER function’s ORDER BY list is not unique, as in the preceding example, the query is nondeterministic—that is, more than one correct result is possible. For example, observe that two rows with the value 36.00 got the row numbers 7 and 8.
+correct. 
+If you want to make a row number calculation deterministic, you need to add a tiebreaker to the ORDER BY list to make it unique. For example, you can add the orderid column.
+If you want to produce the same rank value given the same ordering value, use the RANK or DENSE_RANK function instead. 
+The difference between the two is that RANK reflects the count of rows that have a lower ordering value than the current row (plus 1),
+ whereas DENSE_RANK reflects the count of distinct ordering values that are lower than the current row (plus 1). 
+For example, in the sample query, a rank of 9 indicates eight rows have lower values. In the same row, a dense rank of 8 indicates seven rows that have distinct lower values.
+
+You use the NTILE function to associate the rows in the result with tiles (equally sized groups of rows) by assigning a tile number to each row. You specify the number of tiles you are after and window ordering. The sample query has 830 rows and the request was for 10 tiles; therefore, the tile size is 83 (830 divided by 10). Window ordering is based on the val column. This means that the 83 rows with the lowest values are assigned tile number 1, the next 83 are assigned tile number 2, the next 83 are assigned tile number 3, and so on. If the number of rows can’t be evenly divided by the number of tiles, an extra row is added to each of
+the first tiles from the remainder. For example, if 102 rows and five tiles were requested, the first two tiles would have 21 rows instead of 20.
+
+Like all window functions, ranking functions support a window partition clause. Remember that window partitioning restricts the window to only those rows that have the same values in the partitioning attributes as in the current row. For example, the expression ROW_NUMBER() OVER(PARTITION BY custid ORDER BY val) assigns row numbers independently for each customer. Here’s the expression in a query:
+
+SELECT orderid, custid, val,
+  ROW_NUMBER() OVER(PARTITION BY custid
+                    ORDER BY val) AS rownum
+FROM Sales.OrderValues
+ORDER BY custid, val; This query generates
+
+
+
+

@@ -1,0 +1,15 @@
+The STRING_SPLIT table function splits an input string with a separated list of values into the individual elements. 
+Syntax SELECT value FROM STRING_SPLIT(string, separator[, enable_ordinal]);
+
+the ORDINAL_POSITION refers to a column's location in terms of ordering within a table or query output.
+
+SELECT CAST(value AS INT) AS myvalue, ordinal
+FROM STRING_SPLIT('10248,10249,10250', ',', 1) AS S;
+
+ This code generates the following output:
+myvalue     ordinal
+----------- --------
+10248       1
+10249       2
+10250       3
+

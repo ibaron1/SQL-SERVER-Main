@@ -1,0 +1,6 @@
+You use the FORMAT function to format an input value as a character string based on a Microsoft .NET format string and an optional culture specification. Syntax FORMAT(input, format_string, culture) There are numerous possibilities for formatting
+
+SELECT FORMAT(1759, '000000000');
+
+The FORMAT function is usually more expensive than alternative T-SQL functions that you use to format values. You should generally refrain from using it unless you are willing to accept the performance penalty. As an example, I ran a query against a table with 1,000,000 rows to compute the 10-digit string representation of one of the integer columns. The query took close to a minute to complete on my computer with the FORMAT function compared to under a second with the alternative method using the REPLICATE and RIGHT functions.
+

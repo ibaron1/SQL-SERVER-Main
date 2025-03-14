@@ -1,0 +1,147 @@
+
+SET LANGUAGE British;
+SELECT CAST('20220212' AS DATE);
+
+SET LANGUAGE us_english;
+SELECT CAST('20220212' AS DATE);
+
+
+SET dateformat mdy --US English
+
+instead of destroying index seek if function is used below
+-----------------------------------------------
+SELECT orderid, custid, empid, orderdate
+FROM Sales.Orders
+WHERE YEAR(orderdate) = 2022 AND MONTH(orderdate) = 2; 
+
+use a range filter, like the following: 
+---------------------------------------
+SELECT orderid, custid, empid, orderdate
+FROM Sales.Orders
+WHERE orderdate >= '20220201' AND orderdate < '20220301';
+
+--Ben-Gan, Itzik. T-SQL Fundamentals (Developer Reference) (p. 90). Pearson Education. Kindle Edition. 
+
+Current date and time
+----------------------
+Function		Return type	Description
+GETDATE 		DATETIME 	Current date and time 
+CURRENT_TIMESTAMP 	DATETIME 	Same as GETDATE but SQL-compliant 
+GETUTCDATE 		DATETIME 	Current date and time in UTC 
+SYSDATETIME 		DATETIME2 	Current date and time
+SYSUTCDATETIME 		DATETIME2 	Current date and time in UTC 
+SYSDATETIMEOFFSET 	DATETIMEOFFSET  Current date and time, including the offset from UTC
+
+SELECT
+  GETDATE()           AS [GETDATE],
+  CURRENT_TIMESTAMP   AS [CURRENT_TIMESTAMP],
+  GETUTCDATE()        AS [GETUTCDATE],
+  SYSDATETIME()       AS [SYSDATETIME],
+  SYSUTCDATETIME()    AS [SYSUTCDATETIME],
+  SYSDATETIMEOFFSET() AS [SYSDATETIMEOFFSET];
+
+The CAST, CONVERT, and PARSE functions are used to convert an input value to some target type. If the conversion succeeds, the functions return the converted value; otherwise, they cause the query to fail. The three functions have counterparts called TRY_CAST, TRY_CONVERT, and TRY_PARSE, respectively. 
+Each version with the prefix TRY_ accepts the same input as its counterpart and applies the same conversion; the difference is that if the input isn’t convertible to the target type, the function returns a NULL instead of failing the query. 
+
+Syntax 
+CAST(value AS datatype) 
+TRY_CAST(value AS datatype) 
+CONVERT(datatype, value [, style_number]) T
+TRY_CONVERT(datatype, value [, style_number]) 
+PARSE(value AS datatype [USING culture]) TRY_PARSE(value AS datatype [USING culture]) 
+
+All three base functions convert the input value.
+
+SELECT PARSE('02/12/2022' AS DATETIME USING 'en-US');
+SELECT PARSE('02/12/2022' AS DATETIME USING 'en-GB');
+
+
+The SWITCHOFFSET function The SWITCHOFFSET function adjusts an input DATETIMEOFFSET value to a specified target offset from UTC. Note that you need to take into account whether daylight saving time is in effect or not for your input value with your target offset. Syntax SWITCHOFFSET(datetimeoffset_value, UTC_offset) For example, the following code adjusts the current system datetimeoffset value to offset –05:00. Click here to view code image SELECT SWITCHOFFSET(SYSDATETIMEOFFSET(), '-05:00'); So if the current system datetimeoffset value is February 12, 2022 10:00:00.0000000 –08:00, this code returns the value February 12, 2022 13:00:00.0000000 –05:00.
+
+The TODATETIMEOFFSET function constructs a DATETIMEOFFSET typed value from a local date and time value and an offset from UTC. Syntax TODATETIMEOFFSET(local_date_and_time_value, UTC_offset) This function is different from SWITCHOFFSET in that its first input is a local date and time value without an offset component. This function simply merges the input date and time
+
+The AT TIME ZONE function The AT TIME ZONE function accepts an input date and time value and converts it to a datetimeoffset value that corresponds to the specified target time zone. Syntax dt_val AT TIME ZONE time_zone The input dt_val can be of the following data types: DATETIME, SMALLDATETIME, DATETIME2, and DATETIMEOFFSET. The input time_zone can be any of the supported Windows time-zone names as they appear in the name column in the sys.time_zone_info view. Use the following query to see the available time zones, their current offset from UTC, and whether it’s currently daylight saving time (DST): 
+SELECT name, current_utc_offset, is_currently_dst
+FROM sys.time_zone_info;
+
+Regarding dt_val: when using any of the three non-datetimeoffset types (DATETIME, SMALLDATETIME, and DATETIME2), the AT TIME ZONE function assumes the input value is already in the target time zone. As a result, it behaves similar to the TODATETIMEOFFSET function, except the offset isn’t necessarily fixed. It depends on whether DST applies.
+
+Take the time zone Pacific Standard Time as an example. When it’s not DST, the offset from UTC is –08:00; when it is DST, the offset is –07:00. The following code demonstrates the use of this function with non-datetimeoffset inputs: Click here to view code image SELECT
+  CAST('20220212 12:00:00.0000000' AS DATETIME2)
+    AT TIME ZONE 'Pacific Standard Time' AS val1,
+  CAST('20220812 12:00:00.0000000' AS DATETIME2)
+    AT TIME ZONE 'Pacific Standard Time' AS val2; This code generates the following output: Click here to view code image val1                               val2
+---------------------------------- ----------------------------------
+2022-02-12 12:00:00.0000000 -08:00 2022-08-12 12:00:00.0000000 -07:00
+
+DATEPART(part, dt_val) Valid values for the part argument include year, quarter, month, dayofyear, day, week, weekday, hour, minute, second, millisecond, microsecond, nanosecond, tzoffset (time zone offset), and iso_week (ISO-based week number).
+
+YEAR(dt_val) 
+MONTH(dt_val) 
+DAY(dt_val)
+
+SELECT DATENAME(month, '20220212'); --year
+
+The DATETRUNC function The DATETRUNC function truncates, or floors, the input date and time value to the beginning of the specified part. This function was introduced in SQL Server 2022. Syntax DATETRUNC(part, dt_val)
+Valid values for the part argument include year, quarter, month, dayofyear, day, week, iso_week, hour, minute, second, millisecond, and microsecond.
+SELECT DATETRUNC(month, ‘20220212’); This code returns the following output: ---------------------------
+2022-02-01 00:00:00.0000000
+
+SQL Server 2022 also introduces a function called DATE_BUCKET, which for most
+
+ISDATE(string) 
+For example, the following code returns 1: SELECT ISDATE('20220212'); And the following code returns 0: SELECT ISDATE('20220230');
+
+The FROMPARTS functions The FROMPARTS functions accept integer inputs representing parts of a date and time value and construct a value of the requested type from those parts.
+
+SELECT
+  DATEFROMPARTS(2022, 02, 12),
+  DATETIME2FROMPARTS(2022, 02, 12, 13, 30, 5, 1, 7),
+  DATETIMEFROMPARTS(2022, 02, 12, 13, 30, 5, 997),
+  DATETIMEOFFSETFROMPARTS(2022, 02, 12, 13, 30, 5, 1, -8, 0, 7),
+  SMALLDATETIMEFROMPARTS(2022, 02, 12, 13, 30),
+  TIMEFROMPARTS(13, 30, 5, 1, 7); 
+
+The EOMONTH function accepts an input date and time value and returns the respective end-of-month date as a DATE typed value. The function also supports an optional second argument indicating how many months to add (or subtract, if negative). Syntax EOMONTH(input [, months_to_add])
+
+SELECT orderid, orderdate, custid, empid
+FROM Sales.Orders
+WHERE orderdate = EOMONTH(orderdate);
+
+--get orders for June 2021
+select orderid,orderdate,custid,empid
+from Sales.Orders
+where orderdate between '2021-06-01' and EOMONTH('2021-06-01')
+
+
+The GENERATE_SERIES function is a table function that returns a sequence of numbers in the requested range. This function was introduced in SQL Server 2022. You specify as inputs the range start and stop values, and optionally the step value if you want it to be different than the default (1 for an increasing range and –1 for a decreasing range). You get the result sequence of numbers in a result column called value.
+
+SELECT value
+FROM GENERATE_SERIES( 1, 10 ) AS N; 
+
+With a bit of date and time manipulation you can convert the numbers returned from the function to date and time values. As an example, the following code generates a sequence of all dates in the year 2022: Click here to view code image DECLARE @startdate AS DATE = '20220101', @enddate AS DATE = '20221231';
+
+DECLARE @startdate AS DATE = '20220101', @enddate AS DATE = '20221231';
+
+SELECT DATEADD(day, value, @startdate) AS dt
+FROM GENERATE_SERIES( 0, DATEDIFF(day, @startdate, @enddate) ) AS N;
+ 
+
+dt
+----------
+2022-01-01
+2022-01-02
+2022-01-03
+2022-01-04
+2022-01-05
+...
+2022-12-27
+2022-12-28
+2022-12-29
+2022-12-30
+2022-12-31
+
+(365 rows affected)
+
+
+

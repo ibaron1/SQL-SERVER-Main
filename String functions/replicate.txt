@@ -1,0 +1,5 @@
+The REPLICATE function replicates a string a requested number of times. Syntax REPLICATE(string, n) 
+
+ For example, the following code replicates the string 'abc' three times, returning the string 'abcabcabc': SELECT REPLICATE('abc', 3);
+
+Ben-Gan, Itzik. T-SQL Fundamentals (Developer Reference) (p. 74). Pearson Education. Kindle Edition. 

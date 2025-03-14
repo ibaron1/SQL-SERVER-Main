@@ -1,0 +1,16 @@
+SELECT RTRIM(LTRIM('   abc   '));
+
+Syntax TRIM( [ characters FROM ] string )
+
+TRIM( [ characters FROM ] string ) If you provide just the input string, the TRIM function indeed removes only leading and trailing spaces. However, observe that there’s an optional characters input (square brackets in syntax definition means that the syntax element is optional), which allows you to be specific about the list of individual characters that you want to trim from the start and end of the input string. Attempting to trim nonspace characters from the edges of an input string can be quite tricky without this optional input, especially if those characters can appear in other places beyond the beginning and end. For example, suppose that you need to remove all leading and trailing slashes (both forward and backward) from an input string. I’ll use the following value as my sample input value:
+
+SELECT TRIM( '/\'
+             FROM '//\\ remove leading and trailing backward (\) and forward (/) slashes \\//' )
+       AS outputstring;
+
+SELECT TRIM( '/\'
+             FROM '//\\ remove leading and trailing backward (\) and forward (/) slashes \\//' )
+       AS outputstring;
+
+As mentioned, the various trim functions were enhanced in SQL Server 2022 to provide more functionality. Here’s the enhanced TRIM function’s syntax: TRIM( [ LEADING | TRAILING | BOTH ] [ characters FROM ] string ) As you can see, instead of always trimming both leading and trailing characters, which is the default, you can now be explicit about whether you want to trim leading characters, trailing characters, or both leading and trailing characters. As for the RTRIM and LTRIM functions, here’s their enhanced syntax: RTRIM ( string, [ characters ] ), LTRIM ( string, [ characters ] )
+

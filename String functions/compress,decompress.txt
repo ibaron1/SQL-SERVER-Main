@@ -1,0 +1,15 @@
+COMPRESS(string), DECOMPRESS(string) 
+The COMPRESS function accepts a character or binary string as input and returns a compressed VARBINARY(MAX) typed value. Here’s an example for using the function with a constant as input: Click here to view code image SELECT COMPRESS(N'This is my cv. Imagine it was much longer.'); The result is a binary value holding the compressed form of the input string.
+
+
+
+The DECOMPRESS function accepts a binary string as input and returns a decompressed VARBINARY(MAX) typed value. Note that if the value you originally compressed was of a character string type, you will need to explicitly cast the result of the DECOMPRESS function to the target type. As an example, the following code doesn’t return the original input value; rather, it returns a binary value: 
+
+SELECT DECOMPRESS(COMPRESS(N'This is my cv. Imagine it was much longer.'));
+
+To get the original value, you need to cast the result to the target character string type, like so: 
+
+select
+CAST(
+    DECOMPRESS(COMPRESS(N'This is my cv. Imagine it was much longer.'))
+      AS NVARCHAR(MAX)); 

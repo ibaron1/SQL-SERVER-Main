@@ -1,0 +1,4 @@
+The PATINDEX function returns the position of the first occurrence of a pattern within a string. Syntax PATINDEX(pattern, string) The argument pattern uses
+
+SELECT PATINDEX('%[0-9]%', 'abcd123efgh'); This code returns the output 5.
+

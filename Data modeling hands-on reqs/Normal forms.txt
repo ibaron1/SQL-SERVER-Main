@@ -1,0 +1,26 @@
+First Normal Form (1NF): 
+
+    a single cell must not hold more than one value (atomicity)
+    there must be a primary key for identification
+    no duplicated rows or columns
+    each column must have only one value for each row in the table
+
+Second Normal Form – 2NF
+
+The 1NF only eliminates repeating groups, not redundancy. That’s why there is 2NF.
+
+A table is said to be in 2NF if it meets the following criteria:
+
+    it’s already in 1NF
+    has no partial dependency. That is, all non-key attributes are fully dependent on a primary key.
+
+The Third Normal Form – 3NF
+
+When a table is in 2NF, it eliminates repeating groups and redundancy, but it does not eliminate transitive partial dependency.
+
+This means a non-prime attribute (an attribute that is not part of the candidate’s key) is dependent on another non-prime attribute. This is what the third normal form (3NF) eliminates.
+
+So, for a table to be in 3NF, it must:
+
+    be in 2NF
+    have no transitive partial dependency.

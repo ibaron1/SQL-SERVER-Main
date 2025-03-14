@@ -1,0 +1,27 @@
+You use offset window functions to return an element from a row that is at a certain offset from the current row or at the beginning or end of a window frame. T-SQL supports two pairs of offset functions: LAG and LEAD, and FIRST_VALUE and LAST_VALUE.
+
+You use these functions to obtain an element from a row that is at a certain offset from the current row within the partition, based on the indicated ordering. The LAG function looks before the current row, and the LEAD function looks ahead. The first argument to the functions (which is mandatory) is the element you want to return; the second argument (optional) is the offset (1 if not specified); the third argument (optional) is the default value to return if there is no row at the requested offset (which is NULL if not specified otherwise).
+
+As an example, the following query returns order information from the OrderValues view. For each customer order, the query uses the LAG function to return the value of the previous customer’s order and the LEAD function to return the value of the next customer’s order: 
+SELECT custid, orderid, val,
+  LAG(val)  OVER(PARTITION BY custid
+                 ORDER BY orderdate, orderid) AS prevval,
+  LEAD(val) OVER(PARTITION BY custid
+                 ORDER BY orderdate, orderid) AS nextval
+FROM Sales.OrderValues
+ORDER BY custid, orderdate, orderid; Here’s the output of this query in abbreviated form: 
+
+custid  orderid  val      prevval  nextval
+------- -------- -------- -------- --------
+1       10643    814.50   NULL     878.00
+1       10692    878.00   814.50   330.00
+1       10702    330.00   878.00   845.80
+1       10835    845.80   330.00   471.20
+1       10952    471.20   845.80   933.50
+1       11011    933.50   471.20   NULL
+2       10308    88.80    NULL     479.75
+2       10625    479.75   88.80    320.00
+
+2       10759    320.00   479.75   514.40
+
+Ben-Gan, Itzik. T-SQL Fundamentals (Developer Reference) (pp. 237-238). Pearson Education. Kindle Edition. 

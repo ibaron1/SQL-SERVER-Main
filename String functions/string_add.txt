@@ -1,0 +1,29 @@
+The STRING_AGG aggregate function concatenates the values of the input expression in the aggregated group. 
+
+You can think of it as the inverse of the STRING_SPLIT function. 
+
+Syntax STRING_AGG(input, separator) [ WITHIN GROUP(order_specification) ]
+
+The function concatenates the values of the input argument expression in the target group, separated by the separator argument. To guarantee the order of concatenation, you must specify the optional WITHIN GROUP clause along with the desired ordering specification. As an example, the following query returns the order IDs for each customer, ordered by recency, using a comma as a separator: 
+
+
+SELECT custid,
+  STRING_AGG(CAST(orderid AS VARCHAR(10)), ',')
+    WITHIN GROUP(ORDER BY orderdate DESC, orderid DESC) AS custorders
+FROM Sales.Orders
+GROUP BY custid; 
+
+This query generates the following output, shown here in abbreviated form: 
+
+custid      custorders
+----------- --------------------------------------------
+1           11011,10952,10835,10702,10692,10643
+2           10926,10759,10625,10308
+3           10856,10682,10677,10573,10535,10507,10365
+...
+
+(89 rows affected)
+
+Note that if input is of a VARCHAR datatype, the output is VARCHAR as well; otherwise, it’s NVARCHAR, with implicit conversion if needed. The input orderid column is of an INT datatype, so the code implicitly converts it to VARCHAR to ensure a VARCHAR output. In terms of size, if input is typed as VARCHAR(MAX) or NVARCHAR(MAX), the output is MAX as well. If input is of a limited sized type (1…8000 with VARCHAR and 1…4000 with NVARCHAR), the output is of the respective type with the highest supported limited size (8000 for VARCHAR and 4000 for NVARCHAR). The LIKE predicate
+
+

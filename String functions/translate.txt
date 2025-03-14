@@ -1,0 +1,4 @@
+The TRANSLATE function replaces in the string parameter all occurrences of the individual characters in the characters parameter with the respective individual characters in the translations parameter. Syntax TRANSLATE(string, characters, translations) You can think of the TRANSLATE function as a more flexible version of the REPLACE function, allowing much simpler expressions when multiple single-character replacements are needed. This is especially important
+
+SELECT TRANSLATE('123.456.789,00', '.,', ',.');
+
