@@ -1,0 +1,21 @@
+set -x
+#!/bin/ksh
+PATH=/usr/local/sybase/OCS-12_0/bin:/usr/openwin/bin:$PATH
+LD_LIBRARY_PATH=/u/sybase/OCS-12_0/lib
+SYBASE=/usr/local/sybase
+export PATH
+export LD_LIBRARY_PATH
+export SYBASE
+chmod 744 pw
+pw=`cat pw`
+chmod 000 pw
+SRVR_export=GLSR2
+SRVR_import=GLSRD
+
+for tbl in `cat GPS3_tbls`
+do
+sed "s/GPS33/GPS3/g" < ${SRVR_export}/GPS3/${tbl}.opt > tmp 
+mv tmp ${SRVR_export}/GPS3/${tbl}.opt
+rm tmp
+/glsrd/database/sybase/ASE-12_5/bin/optdiag statistics -i${SRVR_export}/GPS3/${tbl}.opt -Uilyabb -S$SRVR_import  -P$pw
+done

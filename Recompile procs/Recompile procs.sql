@@ -1,0 +1,4 @@
+exec sp_recompile GetORCDailyExtractArrivedDT_EOD
+exec sp_recompile GetORCDailyExtractArrivedDT_RT
+exec sp_recompile GetORCDailyExtractArrivedDT_RTXML 
+exec sp_recompile GetORCDailyExtractPending_RT
