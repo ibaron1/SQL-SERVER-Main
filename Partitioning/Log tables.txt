@@ -1,0 +1,48 @@
+DbName  table_name                                                                                                                       rows                 partition_number
+------- -------------------------------------------------------------------------------------------------------------------------------- -------------------- ----------------
+ktpplus KplusTpSetupLogT                                                                                                                 18                   1
+
+DbName         table_name                                                                                                                       rows                 partition_number
+-------------- -------------------------------------------------------------------------------------------------------------------------------- -------------------- ----------------
+ktpplusArchive KplusTpArchiveSetupLogT                                                                                                          17                   1
+
+DbName      table_name                                                                                                                       rows                 partition_number
+----------- -------------------------------------------------------------------------------------------------------------------------------- -------------------- ----------------
+KplusGlobal KplusGlobalSetupLogT                                                                                                             76                   1
+
+DbName table_name                                                                                                                       rows                 partition_number
+------ -------------------------------------------------------------------------------------------------------------------------------- -------------------- ----------------
+kplus  KewDialogT                                                                                                                       582                  1
+kplus  KewDialogT                                                                                                                       582                  1
+kplus  KmsLog                                                                                                                           0                    1
+kplus  KmsLog                                                                                                                           0                    1
+kplus  KmsLog                                                                                                                           0                    1
+kplus  KmsLogUpdEltT                                                                                                                    0                    1
+kplus  KmsLogUpdEltT                                                                                                                    0                    1
+kplus  KmsLogUpdEltT                                                                                                                    0                    1
+kplus  KmsLogUpdEltT                                                                                                                    0                    1
+kplus  KmsLogUpdEltT                                                                                                                    0                    1
+kplus  KmsLogUpdEltT                                                                                                                    0                    1
+kplus  KplusLocalSetupLogT                                                                                                              110                  1
+
+DbName       table_name                                                                                                                       rows                 partition_number
+------------ -------------------------------------------------------------------------------------------------------------------------------- -------------------- ----------------
+KplusArchive KplusArchiveSetupLogT                                                                                                            103                  1
+
+DbName       table_name                                                                                                                       rows                 partition_number
+------------ -------------------------------------------------------------------------------------------------------------------------------- -------------------- ----------------
+KplusVersion KplusVersionSetupLogT                                                                                                            73                   1
+KplusVersion KplusVersionSetupLogT                                                                                                            73                   1
+
+DbName table_name                                                                                                                       rows                 partition_number
+------ -------------------------------------------------------------------------------------------------------------------------------- -------------------- ----------------
+ksp    ExtSetupLog                                                                                                                      18                   1
+ksp    FinancialConceptsLogs                                                                                                            0                    1
+ksp    VersioningLogs                                                                                                                   2423                 1
+
+DbName table_name                                                                                                                       rows                 partition_number
+------ -------------------------------------------------------------------------------------------------------------------------------- -------------------- ----------------
+Kustom KSP_VersioningLogs                                                                                                               2423                 1
+Kustom KustomSetupLogT                                                                                                                  60                   1
+Kustom VAL_ValoGroup                                                                                                                    6                    1
+

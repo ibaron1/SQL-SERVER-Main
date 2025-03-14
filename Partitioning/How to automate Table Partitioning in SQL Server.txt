@@ -1,0 +1,88 @@
+https://www.sqlshack.com/how-to-automate-table-partitioning-in-sql-server/
+
+Partition details with Row count
+Below are the DMVs that return the number of rows that exist in the filegroup with partition range.
+
+SELECT DISTINCT o.name as table_name, rv.value as partition_range, fg.name as file_groupName, p.partition_number, p.rows as number_of_rows
+FROM sys.partitions p
+INNER JOIN sys.indexes i ON p.object_id = i.object_id AND p.index_id = i.index_id
+INNER JOIN sys.objects o ON p.object_id = o.object_id
+INNER JOIN sys. system_internals_allocation_units au ON p.partition_id = au.container_id
+INNER JOIN sys.partition_schemes ps ON ps.data_space_id = i.data_space_id
+INNER JOIN sys.partition_functions f ON f.function_id = ps.function_id
+INNER JOIN sys. destination_data_spaces dds ON dds.partition_scheme_id = ps.data_space_id AND dds.destination_id = p.partition_number
+INNER JOIN sys. filegroups fg ON dds.data_space_id = fg.data_space_id
+LEFT OUTER JOIN sys.partition_range_values rv ON f. function_id = rv. function_id AND p.partition_number = rv.boundary_id
+WHERE o.object_id = OBJECT_ID('orders');
+
+Table Rows with Partition Number
+
+SELECT $PARTITION. PF_MonthlyPartition(order_date) AS PartitionNumber, *
+FROM orders
+
+Find the Partition Function whose range does not exist for the next month.
+
+SELECT o.name as table_name,
+pf.name as PartitionFunction,
+ps.name as PartitionScheme,
+MAX(rv.value) AS LastPartitionRange,
+CASE WHEN MAX(rv.value) <= DATEADD(MONTH, 2, GETDATE()) THEN 1 else 0 END AS isRequiredMaintenance
+-- INTO #temp
+FROM sys.partitions p
+INNER JOIN sys.indexes i ON p.object_id = i.object_id AND p.index_id = i.index_id
+INNER JOIN sys.objects o ON p.object_id = o.object_id
+INNER JOIN sys. system_internals_allocation_units au ON p.partition_id = au.container_id
+INNER JOIN sys.partition_schemes ps ON ps.data_space_id = i.data_space_id
+INNER JOIN sys.partition_functions pf ON pf.function_id = ps.function_id
+INNER JOIN sys. partition_range_values rv ON pf. function_id = rv. function_id AND p.partition_number = rv.boundary_id
+GROUP BY o.name, pf.name, ps.name
+
+Here, the above result set returned the partition function (PF_MonthlyPartition) for adding the new range.
+
+The following code helps to insert information to the new temp table for those partition functions that are required to SPLIT.
+
+SELECT table_name,
+PartitionFunction,
+PartitionScheme,
+LastPartitionRange,
+CONVERT(VARCHAR, DATEADD(MONTH, 1, LastPartitionRange), 25) AS NewRange,
+'FG_' + CAST(FORMAT(DATEADD(MONTH, 1, LastPartitionRange),'MM') AS VARCHAR(2)) +
+''+
+CAST(YEAR(DATEADD(MONTH, 1, LastPartitionRange)) AS VARCHAR(4)) AS NewFileGroup,
+File_'+ CAST(FORMAT(DATEADD(MONTH, 1, LastPartitionRange), 'MM') AS VARCHAR(2)) +
+CAST(YEAR(DATEADD(MONTH, 1, LastPartitionRange)) AS VARCHAR(4)) AS FileName,
+'C:\Program Files\Microsoft SQL Server\MSSQL13. JRAIYANI\MSSQL\DATA\' AS file_path
+INTO #generateScript
+FROM #temp
+WHERE isRequiredMaintenance = 1
+
+We can also generate a dynamic script to create File Group, File, add a new file group to partition scheme, and new range to the partition function as below:
+
+DECLARE @filegroup NVARCHAR(MAX) = ''
+DECLARE @file NVARCHAR(MAX) = ''
+DECLARE @PScheme NVARCHAR (MAX) = ''
+DECLARE @PFunction NVARCHAR(MAX) = ''
+
+SELECT @filegroup = @filegroup +
+CONCAT('IF NOT EXISTS(SELECT 1 FROM AutoPartition. sys. filegroups WHERE name = ''', NewFileGroup,' ' ' )
+BEGIN
+ALTER DATABASE AutoPartition ADD FileGroup ', NewFileGroup,'
+END; ' ),
+@file = @file + CONCAT('IF NOT EXISTS(SELECT 1 FROM AutoPartition. sys.database_files WHERE name = ''', FileName,'' ' )
+BEGIN
+ALTER DATABASE AutoPartition ADD FILE
+(NAME = ''', FileName,' ' ',
+FILENAME = ''', File_Path, FileName,'.ndf' ',
+SIZE = 5MB, MAXSIZE = UNLIMITED,
+FILEGROWTH = 10MB )
+TO FILEGROUP ',NewFileGroup,
+END;'),
+@PScheme = @PScheme + CONCAT('ALTER PARTITION SCHEME ', PartitionScheme, ' NEXT USED ', NewFileGroup,';'),
+@PFunction = @PFunction + CONCAT('ALTER PARTITION FUNCTION ', PartitionFunction, ' () SPLIT RANGE ('' ',NewRange,'' ');')
+FROM #generateScript
+
+EXEC (@filegroup)
+EXEC (@file)
+EXEC (@PScheme)
+EXEC (@PFunction)
+
