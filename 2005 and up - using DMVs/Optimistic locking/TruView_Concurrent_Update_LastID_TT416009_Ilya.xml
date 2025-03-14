@@ -1,0 +1,10 @@
+<Packages>
+  <Package Name="TruView_Concurrent_Update_LastID_TT416009_Ilya" PackageId="" SourceType="Svn" SourcePathRoot="trunk\Risk\TruView\Database\SQL90\" PrimaryDatabase="RiskBook" Owner="Ilya" IsTemplated="True" ApplyMode="Auto"
+  Description="SP to increment lastID by 1  using snapshot isolation level for concurrent update">
+    <PackageItems>
+      <!--Source SourcePath="" Version="" Owner="" IsTemplated="" TemplateFileName=""-->
+      <Source SourcePath="RiskBook/Tables/_LastID_0_1_tab.sql"></Source>
+      <Source SourcePath="RiskBook/Programmability/StoredProcedures/Update_LastID_prc.sql"></Source>
+    </PackageItems>
+  </Package>
+</Packages>
