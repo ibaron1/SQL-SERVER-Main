@@ -1,0 +1,1 @@
+select @@servername as [SQL Server], crdate as [Boot Time] from master..sysdatabases where name='tempdb'

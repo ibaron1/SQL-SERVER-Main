@@ -1,0 +1,1 @@
+CONVERT (DATE, NULL)
